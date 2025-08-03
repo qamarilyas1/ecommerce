@@ -9,11 +9,11 @@ import{create,getAll,getOne,update,replace,deleteOne} from '../controller/produc
 
 
 productRouter
-.post('/products',create)                                                      
-.get('/products',getAll)
-.get('/products/:id',getOne)
-.put('/products/:id',update)
-.patch('/products/:id',replace)
-.delete('/products/:id',deleteOne)
+.post('/',create)                                                      
+.get('/',getAll)
+.get('/:id',getOne)
+.put('/:id',update)
+.patch('/:id',replace)
+.delete('/:id',deleteOne)
 
 export{productRouter}

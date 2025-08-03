@@ -37,7 +37,7 @@ const server = express();
 server.use(cors());
 server.use(express.static(path.join(__dirname,process.env.PUBLIC_DIR)));
 server.use(express.json());
-server.use('/api/v1',productRouter)
+server.use('/products',productRouter)
 server.use('/add',(req,res)=>{
   res.sendFile(path.join(__dirname,process.env.PUBLIC_DIR,'index.html'))
 })
