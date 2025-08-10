@@ -1,5 +1,3 @@
-import fs from 'fs';
-import mongoose from 'mongoose';
  import { Product as Product } from '../models/product.js';
 
  

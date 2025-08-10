@@ -1,5 +1,5 @@
 import express from 'express';
-import{create,getAll,getOne,update,replace,deleteOne} from '../controller/users.js'
+import{getAll,getOne,update,replace,deleteOne} from '../controller/users.js'
  const userRouter = express.Router();
  
 
@@ -8,12 +8,11 @@ import{create,getAll,getOne,update,replace,deleteOne} from '../controller/users.
 
 
 
-userRouter
-.post('/users',create)                                                      
-.get('/users',getAll)
-.get('/users/:id',getOne)
-.put('/users/:id',update)
-.patch('/users/:id',replace)
-.delete('/users/:id',deleteOne)
+userRouter                                                      
+.get('/',getAll)
+.get('/:id',getOne)
+.put('/:id',update)
+.patch('/:id',replace)
+.delete('/:id',deleteOne)
 
 export{userRouter as userRouter}

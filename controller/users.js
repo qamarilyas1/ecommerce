@@ -1,45 +1,49 @@
-import fs from 'fs';
- //const index =fs.readFileSync('index.html','utf-8');
-  const data =JSON.parse(fs.readFileSync('data.json','utf-8'));
-  const users = data.users
+ import { User as User } from '../models/users.js';
 
 
-
-
-const create= (req,res)=>{
-    users.push(req.body);
-
-    res.json(req.body)
+const getAll = async (req,res)=>{
+       const allUsers = await  User.find();
+    res.json(allUsers);
 }
-
-const getAll = (req,res)=>{
-
-    res.json(users )
-}
-const getOne = (req,res)=>{
-    const id = +req.params.id;
-    const user = users.find(p=>p.id===id)
+const getOne = async (req,res)=>{
+    const id = req.params.id;
+       const user = await  User.findById(id);
     res.json(user);
 }
-const update = (req,res)=>{
-    const id = +req.params.id;
-
-    const userindex=users.findIndex(p=>p.id===id)
-    users.splice(userindex,1,{...req.body,id:id})
-   res.status(201).json();
-
+const update = async (req,res)=>{
+    const id = req.params.id;
+try{
+   const doc = await User.findOneAndReplace({_id:id},req.body,{new:true})
+    res.status(201).json(doc);
 }
-const replace = (req,res)=>{
-   const id = +req.params.id;
-    const userindex=users.findIndex(p=>p.id===id)
-    const product =users[userindex];
-    users.splice(userindex,1,{...product,...req.body});
-    res.status(201).json();
+catch(err){
+    console.log(err);
+    res.status(400).json(err);
 }
-const deleteOne = (req,res)=>{
-   const id = +req.params.id;
-    const userindex=users.findIndex(p=>p.id===id)
-    users.splice(userindex,1);
-    res.status(201).json();
+    
+}
+
+const replace =async (req,res)=>{
+   const id = req.params.id;
+try{
+   const doc = await User.findOneAndUpdate({_id:id},req.body,{new:true})
+    res.status(201).json(doc);
+}
+catch(err){
+    console.log(err);
+    res.status(400).json(err);
+}
+}
+const deleteOne = async(req,res)=>{
+       const id = req.params.id;
+
+  try{
+   const doc = await User.findOneAndDelete({_id:id})
+    res.status(201).json(doc);
+}
+catch(err){
+    console.log(err);
+    res.status(400).json(err);
+}
 } 
-export{create,getAll,getOne,update,replace,deleteOne};
+export{getAll,getOne,update,replace,deleteOne};

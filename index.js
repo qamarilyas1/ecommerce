@@ -1,13 +1,15 @@
 
 import path from 'path';
+import jwt from 'jsonwebtoken';
 import { fileURLToPath } from 'url';
 import env from 'dotenv';
 env.config();
 import mongoose from 'mongoose';
 import cors from 'cors';
 import express from 'express';
- import { productRouter } from './routes/products.js';
-//import { userRouter } from './routes/users.js';
+import { authRouter } from './routes/auth.js';
+import { productRouter } from './routes/products.js';
+import { userRouter } from './routes/users.js';
 
 
 
@@ -34,10 +36,25 @@ async function main() {
 
 
 const server = express();
+const auth = (req,res,next)=>{
+   const token=req.get('Authorization').split('Bearer ')[1];
+   console.log(token);
+   var decoded = jwt.verify(token,process.env.SECRET);
+   if(decoded.email){
+    next();
+
+   }
+   else{
+    res.sendStatus(401);
+   }
+
+};
 server.use(cors());
 server.use(express.static(path.join(__dirname,process.env.PUBLIC_DIR)));
 server.use(express.json());
-server.use('/products',productRouter)
+server.use('/auth',authRouter)
+server.use('/users',auth,userRouter)
+server.use('/products',auth,productRouter)
 server.use('/add',(req,res)=>{
   res.sendFile(path.join(__dirname,process.env.PUBLIC_DIR,'index.html'))
 })
